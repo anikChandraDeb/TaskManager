@@ -1,0 +1,62 @@
+﻿@model TaskViewModel;
+
+<div class="container border border-light p-5 shadow-lg" style="width:600px">
+    <form asp-controller="Task" asp-action="Edit" method="post">
+        <input type="hidden" asp-for="NewTask.Id" />
+        <div class="row">
+            <div class="col-10">
+                <!-- Bind input field to NewTask.Name -->
+                <input type="text" class="form-control" placeholder="Enter task.." asp-for="NewTask.Name">
+            </div>
+            <div class="col-2">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+    
+    <div class="row">
+        @if ((bool)ViewData["status"] == true)
+        {
+            <span style="font-size:12px;text-align: center;color:green;">@ViewData["message"]</span>
+        }
+        @if ((bool)ViewData["status"] == false)
+        {
+            <span style="font-size:12px;text-align: center;color:red;">@ViewData["message"]</span>
+        }
+    </div>
+
+    <table class="table mt-3 border">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th style="width:300px;">Task</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in Model.Tasks)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Toggle" asp-route-id="@task.Id">
+                            @if (task?.IsComplete == true)
+                            {
+                                <i class="fa-solid fa-circle-check"></i>
+                            }
+                            else
+                            {
+                                <i class="fa-regular fa-circle"></i>
+                            }
+                        </a>
+                    </td>
+                    <td>@task.Name</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@task.Id" class="btn btn-sm btn-primary">Edit</a>
+                        <a class="btn btn-sm btn-danger" onclick="popup(@task.Id)">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
